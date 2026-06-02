@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel SAC Multi-Setor</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+    <div class="container-busca">
+        <input type="text" id="inputBusca" onkeyup="filtrarNotas()" placeholder="🔍 Pesquisar Roteador">
+    </div>
+
+    <div id="painel-principal"></div>
+
+    <script src="dados.js"></script> 
+    <script>
+        const painel = document.getElementById('painel-principal');
+
+        function carregarPainel() {
+            painel.innerHTML = ""; // Limpa o painel antes de renderizar
+            
+            setores.forEach((setor, indexSetor) => {
+                // 1. Gera o HTML das Notas/Senhas normais
+                let htmlNotas = '';
+                setor.notas.forEach((texto, indexNota) => {
+                    const idUnico = `nota-${indexSetor}-${indexNota}`;
+                    htmlNotas += `
+                        <div class="bloco-copiar">
+                            <textarea id="${idUnico}">${texto}</textarea>
+                            <div>
+                                <button onclick="copiar('${idUnico}')">COPIAR</button>
+                                <span id="msg-${idUnico}" class="msg-sucesso"></span>
+                            </div>
+                        </div>`;
+                });
+
+                // 2. Cria os botões de fechamento (Lentidão, Troca de Senha, Offline)
+                // Usamos encodeURIComponent para evitar que quebras de linha ou aspas quebrem o HTML
+                const scriptLentidao = encodeURIComponent(setor.scripts?.lentidao || '');
+                const scriptSenha = encodeURIComponent(setor.scripts?.trocaSenha || '');
+                const scriptOffline = encodeURIComponent(setor.scripts?.offline || '');
+
+                const idMsgLentidao = `msg-len-${indexSetor}`;
+                const idMsgSenha = `msg-sen-${indexSetor}`;
+                const idMsgOffline = `msg-off-${indexSetor}`;
+
+                // 3. Junta tudo no Card do Roteador
+                const linha = `
+                    <div class="linha-suporte">
+                        <div class="topo-setor">
+                            <div class="nome-setor">${setor.nome}</div>
+                            <div>
+                                <span class="info-versao">Versão: ${setor.versao || 'N/A'}</span>
+                                <a href="${setor.linkVersao || '#'}" target="_blank" class="link-versao"> [Link da Versão]</a>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-notas">
+                            ${htmlNotas}
+                        </div>
+
+                        <div class="container-scripts">
+                            <button class="btn-script" onclick="copiarTextoPronto('${scriptLentidao}', '${idMsgLentidao}')">
+                                Lentidão <span id="${idMsgLentidao}" class="msg-sucesso"></span>
+                            </button>
+                            <button class="btn-script" onclick="copiarTextoPronto('${scriptSenha}', '${idMsgSenha}')">
+                                Troca de Senha <span id="${idMsgSenha}" class="msg-sucesso"></span>
+                            </button>
+                            <button class="btn-script" onclick="copiarTextoPronto('${scriptOffline}', '${idMsgOffline}')">
+                                Offline <span id="${idMsgOffline}" class="msg-sucesso"></span>
+                            </button>
+                        </div>
+                    </div>`;
+                
+                painel.innerHTML += linha;
+            });
+        }
+
+        // Função de cópia padrão para os Textareas
+        function copiar(id) {
+            const area = document.getElementById(id);
+            area.select();
+            document.execCommand("copy");
+            const msg = document.getElementById("msg-" + id);
+            msg.textContent = "✓";
+            setTimeout(() => { msg.textContent = ""; }, 1000);
+        }
+
+        // Nova Função que copia os textos ocultos dos botões de protocolo
+        function copiarTextoPronto(textoCodificado, idMsg) {
+            const textoReal = decodeURIComponent(textoCodificado);
+            
+            // Cria um input temporário fora da tela para poder copiar o texto
+            const elementoTemporario = document.createElement('textarea');
+            elementoTemporario.value = textoReal;
+            document.body.appendChild(elementoTemporario);
+            elementoTemporario.select();
+            document.execCommand('copy');
+            document.body.removeChild(elementoTemporario);
+
+            // Alerta visual de sucesso no botão correspondente
+            const msg = document.getElementById(idMsg);
+            msg.textContent = "✓";
+            setTimeout(() => { msg.textContent = ""; }, 1000);
+        }
+
+        // Função de busca inteligente (Filtra por Nome do roteador ou conteúdo das notas)
+        function filtrarNotas() {
+            let input = document.getElementById('inputBusca').value.toLowerCase();
+            let haystacks = document.getElementsByClassName('linha-suporte');
+
+            for (let linha of haystacks) {
+                let nomeSetor = linha.querySelector('.nome-setor').textContent.toLowerCase();
+                let blocosNotas = linha.getElementsByClassName('bloco-copiar');
+                let setorTemCorrespondencia = false;
+
+                for (let bloco of blocosNotas) {
+                    let textoNota = bloco.querySelector('textarea').value.toLowerCase();
+                    if (textoNota.includes(input) || nomeSetor.includes(input)) {
+                        bloco.style.display = ""; 
+                        setorTemCorrespondencia = true;
+                    } else {
+                        bloco.style.display = "none"; 
+                    }
+                }
+
+                if (setorTemCorrespondencia || nomeSetor.includes(input)) {
+                    linha.style.display = "flex";
+                } else {
+                    linha.style.display = "none";
+                }
+            }
+        }
+
+        // Inicializa o painel ao abrir a página
+        carregarPainel();
+    </script>
+</body>
+</html>
