@@ -1,0 +1,153 @@
+/* # CONFIGURAÇÕES GERAIS */
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 15px;
+    background-color: #f0f2f5;
+    margin: 0;
+}
+
+/* # CONTAINER DA BARRA DE PESQUISA */
+.container-busca {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#inputBusca {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 20px;
+    font-size: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* # GRID PRINCIPAL */
+#painel-principal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 15px;
+    width: 100%;
+}
+
+/* # CARD DO SETOR (ROTEADOR) */
+.linha-suporte {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* # CABEÇALHO DO CARD (Nome, Versão e Link) */
+.topo-setor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.nome-setor {
+    font-weight: bold;
+    font-size: 13px;
+    color: #007bff;
+    text-transform: uppercase;
+}
+
+.info-versao {
+    font-size: 11px;
+    background: #e9ecef;
+    color: #495057;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.link-versao {
+    font-size: 11px;
+    color: #dc3545;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-versao:hover {
+    text-decoration: underline;
+}
+
+/* # GRADE DE NOTAS (SENHAS) */
+.grid-notas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.bloco-copiar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+textarea {
+    width: 100%;
+    height: 35px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 11px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+}
+
+/* # AREA DOS BOTÕES DE PROTOCOLO */
+.container-scripts {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+    border-top: 1px dashed #eee;
+    padding-top: 8px;
+}
+
+.btn-script {
+    flex: 1;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #b2bec3;
+    transition: all 0.2s;
+}
+
+.btn-script:hover {
+    background-color: #e2e6ea;
+    border-color: #6c757d;
+}
+
+/* # BOTÕES GERAIS */
+button {
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    font-size: 9px;
+    padding: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background-color: #e2e6ea;
+}
+
+.msg-sucesso {
+    color: #28a745;
+    font-size: 10px;
+    margin-left: 5px;
+    font-weight: bold;
+}
